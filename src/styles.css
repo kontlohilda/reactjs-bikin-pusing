@@ -1,0 +1,32 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+}
+.panel-heading {
+  padding-top: 15px;
+  text-align:left !important
+}
+.panel-body{
+  text-align:left !important;
+}
+.kiri{
+  text-align:left !important;
+}
+.center {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  z-index: 15;
+  top: 50%;
+  left: 50%;
+  margin: -50px 0 0 -50px;
+}
+
+.Login {
+  padding: 20px 0;
+}
+
+.Login form {
+  margin: 0 auto;
+  max-width: 320px;
+}
