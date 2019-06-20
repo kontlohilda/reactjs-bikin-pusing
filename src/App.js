@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./styles.css";
-import { useCookies } from 'react-cookie';
+import Cookies from "universal-cookie";
 import firebase from "./fairbes";
 import UserProfile from "./components/UserProfile";
 class App extends Component {
@@ -9,14 +9,13 @@ class App extends Component {
     super(props);
     this.ref = firebase.firestore().collection("boards");
     this.unsubscribe = null;
+
+    const cookies = new Cookies();
     this.state = {
-      boards: []
+      boards: [],
+      name: cookies.get("name")
     };
-    const [cookies, setCookie] = useCookies(['name']);
-    if (cookies == undefined) {
-      this.props.history.push("/login");
-    }
-    console.log(cookies);
+    console.log(cookies.get("name"));
   }
 
   onCollectionUpdate = querySnapshot => {
@@ -38,6 +37,11 @@ class App extends Component {
 
   componentDidMount() {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+    const cookies = new Cookies();
+
+    if (cookies.get("name") === undefined || cookies.get("name") == "") {
+      this.props.history.push("/login");
+    }
   }
 
   render() {
@@ -45,12 +49,11 @@ class App extends Component {
       <div class="container">
         <div class="panel panel-default">
           <br />
-          <b>Selamat Datang {UserProfile.getName()}</b>
+          <b>Selamat Datang </b> {this.state.name}
           <Link to="/logout" class="btn btn-danger">
             Logout
           </Link>
           <hr />
-
           <div class="panel-heading">
             <h3 class="panel-title">POST LIST</h3>
           </div>

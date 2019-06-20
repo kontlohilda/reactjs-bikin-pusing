@@ -11,10 +11,11 @@ import Create from "./components/Create";
 import Show from "./components/Show";
 import ShowUser from "./components/ShowUser";
 import Login from "./components/Login";
-import { CookiesProvider } from 'react-cookie';
+import Logout from "./components/Logout";
+
 
 ReactDOM.render(
-  <CookiesProvider>
+  
   <Router>
     <div>
     <Route path="/login" exact component={Login} />
@@ -24,10 +25,10 @@ ReactDOM.render(
       <Route path="/show/:id" component={ShowUser} />
       <Route path="/showadmin/:id" component={Show} />
       <Route exact path="/admin/" component={App} />
-
+      <Route path="/logout" exact component={Logout} />
     </div>
   </Router>
-  </CookiesProvider>,
+,
   document.getElementById("root")
 );
 

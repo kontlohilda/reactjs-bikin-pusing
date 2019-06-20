@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import firebase from "../fairbes";
 import "../styles.css";
-import { useCookies } from "react-cookie";
+import Cookies from "universal-cookie";
 
-function ase(nama) {
- // const [cookies, setCookie] = useCookies(["name"]);
- // setCookie("name", nama, { path: "/" });
-
+function ase(name) {
+  const cookies = new Cookies();
+  cookies.set("name", name, { path: "/" });
+  console.log(cookies.get("name"));
 }
 
-export default class Login extends Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,6 +25,14 @@ export default class Login extends Component {
     return this.state.email.length > 0 && this.state.password.length > 0;
   }
 
+  componentDidMount() {
+    const cookies = new Cookies();
+
+    if ((cookies.get("name") !== undefined) || (cookies.get("name") != "")) {
+      this.props.history.push("/admin");
+    }
+  }
+
   handleChange = event => {
     this.setState({
       [event.target.id]: event.target.value
@@ -38,27 +46,22 @@ export default class Login extends Component {
     var query = citiesRef
       .where("email", "==", this.state["email"])
       .where("password", "==", this.state["password"]);
-    query
-      .get()
-      .then(function(querySnapshot) {
-        if (querySnapshot.empty) {
-          alert("Username/Password Salah");
-        } else {
-          querySnapshot.forEach(function(doc) {
-            // doc.data() is never undefined for query doc snapshots
-            var nama = String(doc.data().name);
-            alert("Selamat Datang " + nama);
+    query.get().then(function(querySnapshot) {
+      if (querySnapshot.empty) {
+        alert("Username/Password Salah");
+      } else {
+        querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          var nama = String(doc.data().name);
+          alert("Selamat Datang " + nama);
 
-            ase(nama);
-            this.props.history.push("/admin");
-            console.log(doc.id, " => ", doc.data());
-          });
-        }
-      })
-      .catch(function(error) {
-        alert("Terjadi Kesalahan");
-        console.log("Error getting documents: ", String(error));
-      });
+          ase(nama);
+
+          console.log(doc.id, " => ", doc.data());
+          this.props.history.push("/admin");
+        });
+      }
+    });
   };
 
   render() {
@@ -102,3 +105,5 @@ export default class Login extends Component {
     );
   }
 }
+
+export default Login;
